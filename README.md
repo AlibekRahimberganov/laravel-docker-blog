@@ -79,7 +79,7 @@ php artisan serve
 
 The application will be available at `http://localhost:9001`
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── app/
@@ -95,21 +95,21 @@ The application will be available at `http://localhost:9001`
 ├── routes/               # Route definitions
 ```
 
-## 🔧 Configuration
+## Configuration
 
 Key configuration files:
 - `config/app.php` - Application settings
 - `config/database.php` - Database connection
 - `docker-compose.yaml` - Docker services configuration
 
-## 🗄️ Database
+## Database
 
 The application uses the following main tables:
 - **users** - User accounts
 - **posts** - Blog posts
 - **categories** - Post categories
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend**: Laravel 11
 - **Frontend**: Blade, Vite
