@@ -22,6 +22,8 @@ Route::middleware('auth')->group(function () {
 
 Route::get('post/{post}', [PageController::class, 'show_specific_post'])->name('blog.post');
 Route::get('about', [PageController::class, 'about'])->name('blog.about');
+Route::get('contact', [PageController::class, 'contact'])->name('blog.contact');
+
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [PageController::class, 'showlogin'])->name('show.login');
