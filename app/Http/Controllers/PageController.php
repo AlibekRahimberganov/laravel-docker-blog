@@ -33,6 +33,12 @@ class PageController extends Controller
         /* Showing about page */
         return view('about');
     }
+
+    public function contact()
+    {
+        /* render contact page; form processing could be added later */
+        return view('contact');
+    }
     public function profile()
     {
         /* Showing user profile */
