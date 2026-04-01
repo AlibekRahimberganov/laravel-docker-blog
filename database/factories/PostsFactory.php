@@ -3,24 +3,29 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Posts>
- */
 class PostsFactory extends Factory
 {
     public function definition(): array
     {
+        $filePath = fake()->image(
+            storage_path('app/public/posts'),
+            640,
+            480
+        );
+
+        $fileName = basename($filePath);
+
         return [
-            // Post attributes
-            'user_id' => User::inRandomOrder()->first()->id,
-            'category_id' => \App\Models\Category::inRandomOrder()->first()->id,
-            'title' => $this->faker->sentence(),
-            'content' => $this->faker->paragraphs(3, true),
-            'content_media' => $this->faker->imageUrl(),
-            'published_at' => $this->faker->date(),
-            'edited_at' => $this->faker->date(),
+            'user_id' => User::inRandomOrder()->value('id'),
+            'category_id' => Category::inRandomOrder()->value('id'),
+            'title' => fake()->sentence(),
+            'content' => fake()->paragraphs(3, true),
+            'content_media' => 'posts/' . $fileName,
+            'published_at' => fake()->dateTime(),
+            'edited_at' => fake()->dateTime(),
         ];
     }
 }
