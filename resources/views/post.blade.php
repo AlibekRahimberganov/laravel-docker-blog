@@ -26,7 +26,7 @@
             @break
         @endswitch
     @endif
-    <p>{{ $post->content }}</p>
+    <div style="white-space: pre-wrap;">{{ $post->content }}</div>
     <h4>Author: <b>{{ $post->user->login }}</b></h4>
     <h5>Category: <b>{{ $post->category->name }}</b></h5>
 
