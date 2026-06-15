@@ -32,7 +32,7 @@ Route::get('contact', [PageController::class, 'contact'])->name('blog.contact');
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [PageController::class, 'showlogin'])->name('show.login');
-    Route::post('login', [UserController::class, 'login'])->name('login');
+    Route::post('login', [UserController::class, 'login'])->name('login')->middleware('throttle:5,1');
     Route::get('register', [UserController::class, 'showregister'])->name('show.register');
-    Route::post('register', [UserController::class, 'register'])->name('register');
+    Route::post('register', [UserController::class, 'register'])->name('register')->middleware('throttle:5,1');
 });
