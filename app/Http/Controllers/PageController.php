@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Posts;
+use App\Models\PostView;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class PageController extends Controller
 {
@@ -19,7 +21,18 @@ class PageController extends Controller
     }
     public function show_specific_post(Posts $post)
     {
-        /* Showing specific post */
+        /* Showing specific post and tracking views */
+        $viewedKey = 'viewed_post_' . $post->id;
+        if (!Session::has($viewedKey)) {
+            PostView::create([
+                'post_id' => $post->id,
+                'user_id' => Auth::id(),
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+            Session::put($viewedKey, now()->toDateTimeString());
+        }
+
         return view('post', ['post' => $post]);
     }
     public function show()

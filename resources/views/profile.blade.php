@@ -1,22 +1,37 @@
 <x-layout>
-    <h1>{{ $user->login }}</h1>
-    <p>Email: {{ $user->email }}</p>
-    <p>Joined: {{ $user->created_at->format('d M Y') }}</p>
-    <form action="{{ route('logout') }}" method="POST">
-        @csrf
-        <button type="submit" class="btn btn-link">Logout</button>
-    </form>
-    <p>Posts:</p>
-    <ul>
+    <div class="flex justify-between items-center my-8">
+        <div>
+            <h1 class="text-3xl font-bold">{{ $user->login }}</h1>
+            <p class="text-gray-600">Email: {{ $user->email }}</p>
+            <p class="text-gray-600">Joined: {{ $user->created_at->format('d M Y') }}</p>
+        </div>
+        <div class="flex gap-4">
+            <a href="{{ route('blog.stats') }}" class="btn">View Statistics</a>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn bg-red-100 hover:bg-red-500">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mb-4">My Posts</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         @foreach ($posts as $post)
-            <li>
-                <a href="/post/{{ $post->id }}">
-                    <b> <p> {{ $post->author }} </p> <br>
-                    <p> {{ $post->title }} </p> <br> </b>
-                    <img src="{{ "storage/" . $post->content_media }}" alt="Post Media">
-                    <pre> {{ $post->content }} </pre> <br>
-                </a>
-            </li>
+            <div class="card p-4">
+                <div class="flex-1">
+                    <h3 class="text-xl font-semibold mb-2">{{ $post->title }}</h3>
+                    <p class="text-gray-500 text-sm mb-4">{{ $post->created_at->format('d M Y') }}</p>
+                    <div class="flex gap-4 text-sm text-gray-600">
+                        <span><i class="fas fa-eye"></i> {{ $post->views_count }}</span>
+                        <span><i class="fas fa-thumbs-up"></i> {{ $post->likes_count }}</span>
+                    </div>
+                    <a href="{{ route('blog.post', $post) }}" class="reg_btn mt-4 block">View Post</a>
+                </div>
+            </div>
         @endforeach
-    </ul>
+    </div>
+
+    <div class="my-8">
+        {{ $posts->links() }}
+    </div>
 </x-layout>
