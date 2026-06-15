@@ -29,20 +29,26 @@ class BlogController extends Controller
     // delete is working
     public function delete(Posts $post)
     {
-        $post->delete();
         if (Auth::user()->id !== $post->user_id) {
             abort(403);
         }
+        $post->delete();
         return redirect()->route('blog.home')->with('success', 'Post Deleted!');
     }
 
     public function edit(Posts $post)
     {
+        if (Auth::user()->id !== $post->user_id) {
+            abort(403);
+        }
         return view('edit', ['post' => $post]);
     }
 
     public function update(Request $request, Posts $post)
     {
+        if (Auth::user()->id !== $post->user_id) {
+            abort(403);
+        }
         $validated = $request->validate([
             'title' => 'required|string|min:5|max:50',
             'content_media' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mp3|max:10240',
