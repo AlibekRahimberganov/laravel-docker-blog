@@ -27,4 +27,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Posts::class, 'user_id');
     }
+
+    public function reactions()
+    {
+        return $this->hasMany(Reaction::class);
+    }
 }

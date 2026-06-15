@@ -46,6 +46,11 @@
                     </figure>
                     <div class="d-flex justify-content-between tm-text-gray" style="padding: 0 8px;">
                         <span class="tm-text-gray-light">{{ $post->created_at->format('d M Y') }}</span>
+                        <div class="d-flex gap-2 text-xs">
+                            <span title="Likes"><i class="fas fa-thumbs-up"></i> {{ $post->likes_count }}</span>
+                            <span title="Dislikes"><i class="fas fa-thumbs-down"></i> {{ $post->dislikes_count }}</span>
+                            <span title="Recommendations"><i class="fas fa-star text-yellow-500"></i> {{ $post->recommends_count }}</span>
+                        </div>
                     </div>
                 </div>
             @endforeach

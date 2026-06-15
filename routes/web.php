@@ -5,6 +5,8 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReactionController;
+use App\Http\Controllers\StatsController;
 use App\Models\User;
 
 Route::get('/', [PageController::class, 'show'])->name('blog.home');
@@ -17,6 +19,9 @@ Route::middleware('auth')->group(function () {
     Route::put('edit/{post}', [BlogController::class, 'update'])->name('blog.update');
     Route::delete('post/{post}', [BlogController::class, 'delete'])->name('blog.delete');
     Route::post('logout', [UserController::class, 'logout'])->name('logout');
+    Route::post('post/{post}/react/{type}', [ReactionController::class, 'toggle'])->name('post.react');
+    Route::get('statistics', [StatsController::class, 'index'])->name('blog.stats');
+    Route::get('statistics/export', [StatsController::class, 'exportCsv'])->name('blog.stats.export');
 });
 
 

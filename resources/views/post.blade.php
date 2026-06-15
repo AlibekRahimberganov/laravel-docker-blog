@@ -27,6 +27,33 @@
         @endswitch
     @endif
     <div style="white-space: pre-wrap;">{{ $post->content }}</div>
+
+    <div class="flex items-center gap-4 my-6">
+        <form action="{{ route('post.react', ['post' => $post->id, 'type' => 'like']) }}" method="POST">
+            @csrf
+            <button type="submit" class="flex items-center gap-1 {{ $post->hasReaction('like') ? 'text-blue-600' : 'text-gray-500' }} hover:text-blue-700 transition">
+                <i class="fas fa-thumbs-up"></i>
+                <span>{{ $post->likes_count }}</span>
+            </button>
+        </form>
+
+        <form action="{{ route('post.react', ['post' => $post->id, 'type' => 'dislike']) }}" method="POST">
+            @csrf
+            <button type="submit" class="flex items-center gap-1 {{ $post->hasReaction('dislike') ? 'text-red-600' : 'text-gray-500' }} hover:text-red-700 transition">
+                <i class="fas fa-thumbs-down"></i>
+                <span>{{ $post->dislikes_count }}</span>
+            </button>
+        </form>
+
+        <form action="{{ route('post.react', ['post' => $post->id, 'type' => 'recommend']) }}" method="POST">
+            @csrf
+            <button type="submit" class="flex items-center gap-1 {{ $post->hasReaction('recommend') ? 'text-yellow-500' : 'text-gray-500' }} hover:text-yellow-600 transition">
+                <i class="fas fa-star"></i>
+                <span>{{ $post->recommends_count }}</span>
+            </button>
+        </form>
+    </div>
+
     <h4>Author: <b>{{ $post->user->login }}</b></h4>
     <h5>Category: <b>{{ $post->category->name }}</b></h5>
 
