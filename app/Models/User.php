@@ -20,8 +20,11 @@ class User extends Authenticatable
      */
     protected $fillable = ['login', 'email', 'password'];
     protected $hidden = [
-        'password' => 'hashed',
+        'password',
         'remember_token',
+    ];
+    protected $casts = [
+        'password' => 'hashed',
     ];
     public function posts()
     {
@@ -31,5 +34,10 @@ class User extends Authenticatable
     public function reactions()
     {
         return $this->hasMany(Reaction::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 }
