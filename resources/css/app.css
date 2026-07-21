@@ -72,6 +72,13 @@ input, select, textarea {
   @apply text-blue-600 hover:text-blue-800 underline;
 }
 .muted {
-    color: #6b7280; 
+    color: #6b7280;
+}
+
+/* Tailwind's `.collapse` visibility utility collides with Bootstrap's
+   `.collapse` component class (navbar toggler) and was leaving the
+   navbar links permanently invisible. */
+.navbar-collapse.collapse {
+    visibility: visible;
 }
 
