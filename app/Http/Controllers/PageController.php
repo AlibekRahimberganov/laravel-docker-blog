@@ -59,4 +59,13 @@ class PageController extends Controller
         $posts = $user->posts()->orderBy('created_at', 'desc')->paginate(10);
         return view('profile', ['user' => $user, 'posts' => $posts]);
     }
+
+    public function favourites()
+    {
+        /* Showing posts the current user has recommended */
+        $posts = Posts::whereHas('reactions', function ($query) {
+            $query->where('user_id', Auth::id())->where('type', 'recommend');
+        })->with('category')->orderBy('created_at', 'desc')->paginate(10);
+        return view('favourites', ['posts' => $posts]);
+    }
 }

@@ -35,6 +35,7 @@
                     @endguest
                     @auth
                         <li class="nav-item"><a class="nav-link" href="{{ route('blog.profile') }}">{{ auth()->user()->login }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('blog.favourites') }}">Favourites</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('blog.create') }}">Create New Post</a></li>
                         @if (auth()->user()->isAdmin())
                             <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Admin Panel</a></li>

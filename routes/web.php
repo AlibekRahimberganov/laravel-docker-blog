@@ -17,6 +17,7 @@ Route::get('/', [PageController::class, 'show'])->name('blog.home');
 
 Route::middleware('auth')->group(function () {
     Route::get('profile', [PageController::class, 'profile'])->name('blog.profile');
+    Route::get('favourites', [PageController::class, 'favourites'])->name('blog.favourites');
     Route::get('create', [PageController::class, 'create'])->name('blog.create');
     Route::post('create', [BlogController::class, 'store'])->name('blog.store');
     Route::get('edit/{post}', [BlogController::class, 'edit'])->name('blog.edit');
