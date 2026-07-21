@@ -35,5 +35,15 @@ services:
     depends_on:
       - app
 
+  scheduler:
+    build: .
+    user: root
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    command: php artisan schedule:work
+
 volumes:
   db_data:

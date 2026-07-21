@@ -55,7 +55,7 @@ Routes are defined only in `routes/web.php` (no `api.php` in use). Middleware gr
 - `guest` — login/register, each throttled `throttle:5,1`
 - ungated — home, single post view, about/contact
 
-`bootstrap/app.php` globally appends `App\Http\Middleware\SecurityHeaders` (sets `X-Frame-Options`, `X-Content-Type-Options`, `X-XSS-Protection`, `Referrer-Policy`) and calls `validateCsrfTokens(except: ['*'])` — CSRF verification is currently disabled for every route project-wide. Keep this in mind when touching auth/forms; don't assume CSRF protection is active. It also registers the `admin` middleware alias to `App\Http\Middleware\EnsureUserIsAdmin`, which 403s any request where `$request->user()?->isAdmin()` is false.
+`bootstrap/app.php` globally appends `App\Http\Middleware\SecurityHeaders` (sets `X-Frame-Options`, `X-Content-Type-Options`, `X-XSS-Protection`, `Referrer-Policy`) and registers the `admin` middleware alias to `App\Http\Middleware\EnsureUserIsAdmin`, which 403s any request where `$request->user()?->isAdmin()` is false. CSRF verification is the Laravel default (active on every stateful route) — Blade forms need `@csrf`, and JS requests must go through `window.axios` (configured in `resources/js/bootstrap.js`) so the `XSRF-TOKEN` cookie is attached automatically; raw `fetch()` calls will get a 419.
 
 ### Controllers (`app/Http/Controllers`)
 - `PageController` — renders views (home feed, post detail, profile, static pages) and records `PostView` rows (one per session per post, deduped via a `viewed_post_{id}` session key, not a DB unique constraint).
