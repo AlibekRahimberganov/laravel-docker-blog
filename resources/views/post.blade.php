@@ -21,9 +21,17 @@
                 @break
 
                 @case('mp3')
-                <audio controls class="w-full">
-                    <source src="{{ asset('storage/' . $path) }}" alt="audio_file" type="audio/mpeg">
-                </audio>
+                <div class="w-full max-w-md">
+                    @if ($post->content_media_cover)
+                        <img src="{{ asset('storage/' . $post->content_media_cover) }}" alt="Cover art" class="rounded-lg mb-2 mx-auto max-h-64">
+                    @endif
+                    @if ($post->content_media_artist)
+                        <p class="text-center text-gray-500 mb-2">{{ $post->content_media_artist }}</p>
+                    @endif
+                    <audio controls class="w-full">
+                        <source src="{{ asset('storage/' . $path) }}" alt="audio_file" type="audio/mpeg">
+                    </audio>
+                </div>
                 @break
             @endswitch
         </div>

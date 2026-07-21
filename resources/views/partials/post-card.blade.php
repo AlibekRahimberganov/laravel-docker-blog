@@ -14,6 +14,18 @@
                         <source src="{{ asset('storage/' . $path) }}" type="video/mp4">
                     </video>
                     @break
+                @case('mp3')
+                    @if ($post->content_media_cover)
+                        <img src="{{ asset('storage/' . $post->content_media_cover) }}" alt="{{ $post->title }}" class="img-fluid">
+                    @else
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 280px; display: flex; align-items: center; justify-content: center; color: white;">
+                            <i class="fas fa-music fa-3x"></i>
+                        </div>
+                    @endif
+                    @if ($post->content_media_artist)
+                        <span class="tm-text-gray-light" style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.5); color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">{{ $post->content_media_artist }}</span>
+                    @endif
+                    @break
             @endswitch
         @else
             <!-- Text preview when no media -->
