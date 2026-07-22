@@ -1,0 +1,54 @@
+name: Testing
+
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kodni olish
+        uses: actions/checkout@v4
+
+      - name: PHP o'rnatish
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_sqlite, zip, gd
+
+      - name: Node o'rnatish
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: .env yaratish
+        run: cp .env.example .env
+
+      - name: Composer install
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: NPM install va build
+        run: |
+          npm ci
+          npm run build
+
+      - name: APP_KEY generatsiya
+        run: php artisan key:generate
+
+      - name: SQLite fayl yaratish
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+
+      - name: Migratsiya
+        run: php artisan migrate --force
+
+      - name: Testlarni ishga tushirish
+        run: php artisan test
+
+      - name: Dockerfile build tekshiruvi
+        run: docker build -t bsk-test-build .
