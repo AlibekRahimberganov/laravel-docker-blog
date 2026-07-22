@@ -3,9 +3,10 @@ name: CI-CD
 on:
   push:
     branches: [main]
-  workflow_dispatch:
+  workflow_dispatch:  # qo'lda ham ishga tushirish imkoniyati
 
 jobs:
+  # ---------- 1-bosqich: Test ----------
   test:
     runs-on: ubuntu-latest
 
@@ -43,18 +44,16 @@ jobs:
           mkdir -p database
           touch database/database.sqlite
 
-      - name: Migratsiya
-        run: php artisan migrate --force
-
       - name: Testlarni ishga tushirish
         run: php artisan test
 
       - name: Dockerfile build tekshiruvi
         run: docker build -t bsk-test-build .
 
+  # ---------- 2-bosqich: Deploy (faqat testlar muvaffaqiyatli bo'lsa) ----------
   deploy:
     runs-on: ubuntu-latest
-    needs: test
+    needs: test  # <-- shu qator "test" job muvaffaqiyatli tugashini talab qiladi
 
     steps:
       - name: Serverga SSH orqali ulanib deploy.sh ni ishga tushirish
