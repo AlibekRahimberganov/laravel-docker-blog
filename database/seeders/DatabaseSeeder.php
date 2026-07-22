@@ -9,11 +9,17 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->count(50)->create();
+        $admin = User::factory()->create([
+            'login' => 'admin',
+            'email' => 'admin@example.com',
+        ]);
+        $admin->forceFill(['role' => 'admin'])->save();
+
+        User::factory()->count(10)->create();
 
         $this->call([
             CategorySeeder::class,
-            PostsSeeder::class,
+            RealPostsSeeder::class,
         ]);
     }
 }

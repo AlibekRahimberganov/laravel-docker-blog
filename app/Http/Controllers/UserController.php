@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -14,9 +15,9 @@ class UserController extends Controller
     {
         // creating an acc
         $validated = $request->validate([
-            'login' => 'required|string|max:255|min:5|unique:users',
+            'login' => 'required|string|max:25|min:5|unique:users',
             'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->letters()->numbers()->mixedCase()]
         ]);
 
         $validated['password'] = Hash::make($validated['password']);

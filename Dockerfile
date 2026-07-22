@@ -19,9 +19,9 @@ WORKDIR /var/www/html
 RUN apt-get update && apt-get install -y \
         zip unzip git curl libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
         libonig-dev libxml2-dev libzip-dev build-essential \
-        sqlite3 libsqlite3-dev \
+        sqlite3 libsqlite3-dev default-mysql-client \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_sqlite zip mbstring gd \
+    && docker-php-ext-install pdo pdo_sqlite pdo_mysql zip mbstring gd \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . .

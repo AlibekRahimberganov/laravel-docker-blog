@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/templatemo-style.css') }}">
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
-    @vite('resources/css/app.css')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
     <div id="loader-wrapper">
@@ -35,7 +35,11 @@
                     @endguest
                     @auth
                         <li class="nav-item"><a class="nav-link" href="{{ route('blog.profile') }}">{{ auth()->user()->login }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('blog.favourites') }}">Favourites</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('blog.create') }}">Create New Post</a></li>
+                        @if (auth()->user()->isAdmin())
+                            <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Admin Panel</a></li>
+                        @endif
                     @endauth
                 </ul>
             </div>
@@ -45,6 +49,12 @@
     @if (session('success'))
         <div id="flash" class="p-4 text-center bg-green-50 text-green-500 font-blog">
             {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div id="flash" class="p-4 text-center bg-red-50 text-red-500 font-blog">
+            {{ session('error') }}
         </div>
     @endif
 

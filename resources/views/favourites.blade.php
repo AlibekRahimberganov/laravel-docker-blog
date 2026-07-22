@@ -1,19 +1,19 @@
 <x-layout>
-    <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="{{ asset('img/hero.jpg') }}">
-        <!-- optional search form could go here -->
-    </div>
-
     <div class="container-fluid tm-container-content tm-mt-60">
         <div class="row mb-4">
             <h2 class="tm-text-primary">
-                Latest Posts
+                My Favourites
             </h2>
         </div>
 
         <div class="row tm-mb-90 tm-gallery" style="margin-left: -8px; margin-right: -8px;">
-            @foreach ($posts as $post)
+            @forelse ($posts as $post)
                 @include('partials.post-card', ['post' => $post])
-            @endforeach
+            @empty
+                <div class="col-12 text-center py-5">
+                    <p class="tm-text-gray">You haven't recommended any posts yet.</p>
+                </div>
+            @endforelse
         </div>
 
         <div class="row tm-mb-90">

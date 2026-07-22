@@ -5,6 +5,25 @@ services:
     volumes:
       - .:/var/www/html
       - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   nginx:
     image: nginx:alpine
@@ -15,3 +34,16 @@ services:
       - .:/var/www/html
     depends_on:
       - app
+
+  scheduler:
+    build: .
+    user: root
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    command: php artisan schedule:work
+
+volumes:
+  db_data:
