@@ -61,17 +61,22 @@ class FullApplicationTest extends TestCase
             'edited_at' => now(),
         ]);
 
+        $batcher = app(\App\Services\ReactionBatchService::class);
+
         // Like the post
         $this->actingAs($user)->post("/post/{$post->id}/react/like");
+        $batcher->flushAll();
         $this->assertEquals(1, $post->fresh()->likes_count);
 
         // Dislike the post (should remove like)
         $this->actingAs($user)->post("/post/{$post->id}/react/dislike");
+        $batcher->flushAll();
         $this->assertEquals(0, $post->fresh()->likes_count);
         $this->assertEquals(1, $post->fresh()->dislikes_count);
 
         // Recommend (independent)
         $this->actingAs($user)->post("/post/{$post->id}/react/recommend");
+        $batcher->flushAll();
         $this->assertEquals(1, $post->fresh()->recommends_count);
         $this->assertEquals(1, $post->fresh()->dislikes_count);
     }
