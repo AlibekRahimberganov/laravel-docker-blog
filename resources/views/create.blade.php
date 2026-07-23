@@ -16,6 +16,23 @@
                 </option>
             @endforeach
         </select>
+
+        <label for="tags">Tags (comma-separated, up to 10):</label>
+        <input type="text" id="tags" name="tags" value="{{ old('tags') }}" placeholder="e.g. music, classical, history" maxlength="200"><br>
+
+        <label>Co-authors (optional, up to 5):</label>
+        @for ($i = 0; $i < 5; $i++)
+            <div class="flex gap-4 mb-2">
+                <select name="co_author_user[]" class="flex-1">
+                    <option value="">-- Not an existing user --</option>
+                    @foreach ($users as $siteUser)
+                        <option value="{{ $siteUser->id }}" {{ old("co_author_user.$i") == $siteUser->id ? 'selected' : '' }}>{{ $siteUser->login }}</option>
+                    @endforeach
+                </select>
+                <input type="text" name="co_author_name[]" value="{{ old("co_author_name.$i") }}" placeholder="or free-text author name" class="flex-1">
+            </div>
+        @endfor
+
         <button class="btn" type="submit">Create Post</button>
 
         @if($errors->any())

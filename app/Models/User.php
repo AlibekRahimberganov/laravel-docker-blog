@@ -31,6 +31,17 @@ class User extends Authenticatable
         return $this->hasMany(Posts::class, 'user_id');
     }
 
+    public function coAuthoredPosts()
+    {
+        return Posts::whereHas('coAuthors', fn ($q) => $q->where('user_id', $this->id));
+    }
+
+    public function visiblePosts()
+    {
+        return Posts::where('user_id', $this->id)
+            ->orWhereHas('coAuthors', fn ($q) => $q->where('user_id', $this->id));
+    }
+
     public function reactions()
     {
         return $this->hasMany(Reaction::class);

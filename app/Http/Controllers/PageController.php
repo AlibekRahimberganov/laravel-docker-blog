@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Posts;
 use App\Models\PostView;
+use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -13,17 +15,21 @@ class PageController extends Controller
     {
         return view('login');
     }
+
     public function create()
     {
         /* Routing to create post page */
         $categories = \App\Models\Category::orderBy('name')->get();
-        return view('create', compact('categories'));
+        $users = User::where('id', '!=', Auth::id())->orderBy('login')->get();
+
+        return view('create', compact('categories', 'users'));
     }
+
     public function show_specific_post(Posts $post)
     {
         /* Showing specific post and tracking views */
-        $viewedKey = 'viewed_post_' . $post->id;
-        if (!Session::has($viewedKey)) {
+        $viewedKey = 'viewed_post_'.$post->id;
+        if (! Session::has($viewedKey)) {
             PostView::create([
                 'post_id' => $post->id,
                 'user_id' => Auth::id(),
@@ -33,14 +39,19 @@ class PageController extends Controller
             Session::put($viewedKey, now()->toDateTimeString());
         }
 
+        $post->load(['coAuthors.user', 'tags']);
+
         return view('post', ['post' => $post]);
     }
+
     public function show()
     {
         /* Showing all posts on main page */
-        $posts = Posts::orderBy('created_at', 'desc')->paginate(10);
+        $posts = Posts::with(['tags'])->orderBy('created_at', 'desc')->paginate(10);
+
         return view('welcome', ['posts' => $posts]);
     }
+
     public function about()
     {
         /* Showing about page */
@@ -52,12 +63,30 @@ class PageController extends Controller
         /* render contact page; form processing could be added later */
         return view('contact');
     }
+
     public function profile()
     {
-        /* Showing user profile */
+        /* Showing user profile, including posts they co-author */
         $user = Auth::user();
-        $posts = $user->posts()->orderBy('created_at', 'desc')->paginate(10);
+        $posts = $user->visiblePosts()->orderBy('created_at', 'desc')->paginate(10);
+
         return view('profile', ['user' => $user, 'posts' => $posts]);
+    }
+
+    public function authorProfile(User $user)
+    {
+        /* Public profile page for viewing another user's (and their co-authored) posts */
+        $posts = $user->visiblePosts()->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('author-profile', ['user' => $user, 'posts' => $posts]);
+    }
+
+    public function showTag(Tag $tag)
+    {
+        /* Showing all posts under a given tag */
+        $posts = $tag->posts()->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('tag', ['tag' => $tag, 'posts' => $posts]);
     }
 
     public function favourites()
@@ -65,7 +94,8 @@ class PageController extends Controller
         /* Showing posts the current user has recommended */
         $posts = Posts::whereHas('reactions', function ($query) {
             $query->where('user_id', Auth::id())->where('type', 'recommend');
-        })->with('category')->orderBy('created_at', 'desc')->paginate(10);
+        })->with(['category', 'tags'])->orderBy('created_at', 'desc')->paginate(10);
+
         return view('favourites', ['posts' => $posts]);
     }
 }

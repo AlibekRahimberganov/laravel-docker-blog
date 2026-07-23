@@ -19,7 +19,12 @@
         @foreach ($posts as $post)
             <div class="card p-4">
                 <div class="flex-1">
-                    <h3 class="text-xl font-semibold mb-2">{{ $post->title }}</h3>
+                    <h3 class="text-xl font-semibold mb-2">
+                        {{ $post->title }}
+                        @if ($post->user_id !== $user->id)
+                            <span class="text-xs text-gray-400 font-normal">(co-authored)</span>
+                        @endif
+                    </h3>
                     <p class="text-gray-500 text-sm mb-4">{{ $post->created_at->format('d M Y') }}</p>
                     <div class="flex gap-4 text-sm text-gray-600">
                         <span><i class="fas fa-eye"></i> {{ $post->views_count }}</span>

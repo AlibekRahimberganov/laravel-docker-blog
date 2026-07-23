@@ -1,17 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ReactionController;
-use App\Http\Controllers\StatsController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Models\User;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\ReactionController;
+use App\Http\Controllers\StatsController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PageController::class, 'show'])->name('blog.home');
 
@@ -29,11 +27,11 @@ Route::middleware('auth')->group(function () {
     Route::get('statistics/export', [StatsController::class, 'exportCsv'])->name('blog.stats.export');
 });
 
-
 Route::get('post/{post}', [PageController::class, 'show_specific_post'])->name('blog.post');
+Route::get('author/{user}', [PageController::class, 'authorProfile'])->name('blog.author');
+Route::get('tag/{tag}', [PageController::class, 'showTag'])->name('blog.tag');
 Route::get('about', [PageController::class, 'about'])->name('blog.about');
 Route::get('contact', [PageController::class, 'contact'])->name('blog.contact');
-
 
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -47,7 +45,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::resource('categories', AdminCategoryController::class)->except(['show'])->names('categories');
 });
-
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [PageController::class, 'showlogin'])->name('show.login');
