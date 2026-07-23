@@ -17,7 +17,7 @@
 body {
   @apply bg-gray-100 text-gray-700;
   @apply text-gray-700 text-left;
-  font-family: "rubik";
+  font-family: var(--font-sans);
 }
 h1 {
   @apply text-2xl font-bold text-red-500;
@@ -56,9 +56,6 @@ input, select, textarea {
   border: 1px solid gray;
 }
 
-.container {
-  @apply max-w-screen-lg mx-auto;
-}
 .card {
   @apply bg-white rounded border border-gray-200 flex flex-col md:flex-row justify-between items-start;
 }

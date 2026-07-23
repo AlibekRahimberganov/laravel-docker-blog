@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Site</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/templatemo-style.css') }}">
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.min.css') }}">
@@ -16,7 +19,7 @@
         <div class="loader-section section-right"></div>
     </div>
 
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('blog.home') }}">
                 <i class="fas fa-film mr-2"></i>BlogSite
@@ -47,18 +50,18 @@
     </nav>
 
     @if (session('success'))
-        <div id="flash" class="p-4 text-center bg-green-50 text-green-500 font-blog">
+        <div id="flash" class="p-4 text-center bg-green-50 text-green-500">
             {{ session('success') }}
         </div>
     @endif
 
     @if (session('error'))
-        <div id="flash" class="p-4 text-center bg-red-50 text-red-500 font-blog">
+        <div id="flash" class="p-4 text-center bg-red-50 text-red-500">
             {{ session('error') }}
         </div>
     @endif
 
-    <main class="container">
+    <main class="container-fluid px-4 py-8">
         {{ $slot }}
     </main>
 
