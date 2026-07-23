@@ -11,6 +11,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
+
     use Notifiable;
 
     /**
@@ -19,13 +20,16 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = ['login', 'email', 'password', 'avatar', 'bio'];
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
     protected $casts = [
         'password' => 'hashed',
     ];
+
     public function posts()
     {
         return $this->hasMany(Posts::class, 'user_id');
