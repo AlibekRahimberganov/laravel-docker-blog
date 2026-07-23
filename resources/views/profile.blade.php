@@ -1,11 +1,18 @@
 <x-layout>
     <div class="flex justify-between items-center my-8">
-        <div>
-            <h1 class="text-3xl font-bold">{{ $user->login }}</h1>
-            <p class="text-gray-600">Email: {{ $user->email }}</p>
-            <p class="text-gray-600">Joined: {{ $user->created_at->format('d M Y') }}</p>
+        <div class="flex items-center gap-4">
+            <img src="{{ $user->avatar_url }}" alt="{{ $user->login }}" class="w-28 h-28 rounded-full object-cover">
+            <div>
+                <h1 class="text-3xl font-bold">{{ $user->login }}</h1>
+                <p class="text-gray-600">Email: {{ $user->email }}</p>
+                <p class="text-gray-600">Joined: {{ $user->created_at->format('d M Y') }}</p>
+                @if ($user->bio)
+                    <p class="text-gray-700 mt-2 max-w-xl">{{ $user->bio }}</p>
+                @endif
+            </div>
         </div>
         <div class="flex gap-4">
+            <a href="{{ route('blog.profile.edit') }}" class="btn">Edit Profile</a>
             <a href="{{ route('blog.stats') }}" class="btn">View Statistics</a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf

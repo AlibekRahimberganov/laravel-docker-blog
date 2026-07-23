@@ -18,7 +18,7 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = ['login', 'email', 'password'];
+    protected $fillable = ['login', 'email', 'password', 'avatar', 'bio'];
     protected $hidden = [
         'password',
         'remember_token',
@@ -50,5 +50,10 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->avatar ? asset('storage/'.$this->avatar) : asset('images/default-avatar.svg');
     }
 }

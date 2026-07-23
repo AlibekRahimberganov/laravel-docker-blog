@@ -56,6 +56,35 @@ input, select, textarea {
   border: 1px solid gray;
 }
 
+input[type="file"] {
+  padding: 0.5rem;
+}
+input[type="file"]::file-selector-button {
+  background: #e5e7eb;
+  border: 1px solid #9ca3af;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  margin-right: 0.75rem;
+  cursor: pointer;
+}
+input[type="file"]::file-selector-button:hover {
+  background: #d1d5db;
+}
+
+/* Bootstrap's unlayered `label{display:inline-block}` beats Tailwind's
+   layered `.flex` utility under CSS cascade layers, so a plain unlayered
+   rule is needed to reliably put an inline checkbox+label on one line. */
+.form-check-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.form-check-inline input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
 .card {
   @apply bg-white rounded border border-gray-200 flex flex-col md:flex-row justify-between items-start;
 }
