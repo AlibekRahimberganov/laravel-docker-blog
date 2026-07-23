@@ -56,4 +56,36 @@ class User extends Authenticatable
     {
         return $this->avatar ? asset('storage/'.$this->avatar) : asset('images/default-avatar.svg');
     }
+
+    public function sentFriendRequests()
+    {
+        return $this->hasMany(Friendship::class, 'sender_id');
+    }
+
+    public function receivedFriendRequests()
+    {
+        return $this->hasMany(Friendship::class, 'receiver_id');
+    }
+
+    public function friends()
+    {
+        $friendIds = Friendship::where('status', 'accepted')
+            ->where(fn ($q) => $q->where('sender_id', $this->id)->orWhere('receiver_id', $this->id))
+            ->get()
+            ->map(fn ($f) => $f->sender_id === $this->id ? $f->receiver_id : $f->sender_id);
+
+        return User::whereIn('id', $friendIds);
+    }
+
+    public function friendshipWith(User $other): ?Friendship
+    {
+        return Friendship::where(fn ($q) => $q->where('sender_id', $this->id)->where('receiver_id', $other->id))
+            ->orWhere(fn ($q) => $q->where('sender_id', $other->id)->where('receiver_id', $this->id))
+            ->first();
+    }
+
+    public function isFriendsWith(User $other): bool
+    {
+        return $this->friendshipWith($other)?->status === 'accepted';
+    }
 }

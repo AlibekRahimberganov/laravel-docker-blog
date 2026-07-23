@@ -66,19 +66,29 @@ class PageController extends Controller
 
     public function profile()
     {
-        /* Showing user profile, including posts they co-author */
+        /* Showing user profile, including posts they co-author, friends, and pending requests */
         $user = Auth::user();
         $posts = $user->visiblePosts()->orderBy('created_at', 'desc')->paginate(10);
+        $friends = $user->friends()->get();
+        $incomingRequests = $user->receivedFriendRequests()->where('status', 'pending')->with('sender')->get();
+        $outgoingRequests = $user->sentFriendRequests()->where('status', 'pending')->with('receiver')->get();
 
-        return view('profile', ['user' => $user, 'posts' => $posts]);
+        return view('profile', [
+            'user' => $user,
+            'posts' => $posts,
+            'friends' => $friends,
+            'incomingRequests' => $incomingRequests,
+            'outgoingRequests' => $outgoingRequests,
+        ]);
     }
 
     public function authorProfile(User $user)
     {
         /* Public profile page for viewing another user's (and their co-authored) posts */
         $posts = $user->visiblePosts()->orderBy('created_at', 'desc')->paginate(10);
+        $friendship = Auth::check() ? Auth::user()->friendshipWith($user) : null;
 
-        return view('author-profile', ['user' => $user, 'posts' => $posts]);
+        return view('author-profile', ['user' => $user, 'posts' => $posts, 'friendship' => $friendship]);
     }
 
     public function showTag(Tag $tag)

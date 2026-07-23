@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\FriendshipController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\StatsController;
@@ -27,6 +28,10 @@ Route::middleware('auth')->group(function () {
     Route::post('post/{post}/react/{type}', [ReactionController::class, 'toggle'])->name('post.react');
     Route::get('statistics', [StatsController::class, 'index'])->name('blog.stats');
     Route::get('statistics/export', [StatsController::class, 'exportCsv'])->name('blog.stats.export');
+
+    Route::post('friends/{user}', [FriendshipController::class, 'store'])->name('friends.request');
+    Route::put('friends/{friendship}/accept', [FriendshipController::class, 'accept'])->name('friends.accept');
+    Route::delete('friends/{friendship}', [FriendshipController::class, 'destroy'])->name('friends.destroy');
 });
 
 Route::get('post/{post}', [PageController::class, 'show_specific_post'])->name('blog.post');
