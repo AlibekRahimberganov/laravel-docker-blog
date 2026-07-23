@@ -6,6 +6,7 @@
                 <h1 class="text-3xl font-bold">{{ $user->login }}</h1>
                 <p class="text-gray-600">Email: {{ $user->email }}</p>
                 <p class="text-gray-600">Joined: {{ $user->created_at->format('d M Y') }}</p>
+                <p class="text-gray-600 text-sm mt-1">{{ $followers->count() }} followers · {{ $following->count() }} following</p>
                 @if ($user->bio)
                     <p class="text-gray-700 mt-2 max-w-xl">{{ $user->bio }}</p>
                 @endif
@@ -75,6 +76,18 @@
             </a>
         @empty
             <p class="text-gray-500">No friends yet.</p>
+        @endforelse
+    </div>
+
+    <h2 class="text-2xl font-bold mb-4">Following ({{ $following->count() }})</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        @forelse ($following as $followedUser)
+            <a href="{{ route('blog.author', $followedUser) }}" class="card p-4 flex items-center gap-3">
+                <img src="{{ $followedUser->avatar_url }}" alt="{{ $followedUser->login }}" class="w-10 h-10 rounded-full object-cover">
+                {{ $followedUser->login }}
+            </a>
+        @empty
+            <p class="text-gray-500">You're not following anyone yet.</p>
         @endforelse
     </div>
 

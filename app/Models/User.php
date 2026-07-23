@@ -93,4 +93,19 @@ class User extends Authenticatable
     {
         return Message::where('receiver_id', $this->id)->whereNull('read_at')->count();
     }
+
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id')->withTimestamps();
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'followed_id', 'follower_id')->withTimestamps();
+    }
+
+    public function isFollowing(User $other): bool
+    {
+        return $this->following()->where('followed_id', $other->id)->exists();
+    }
 }

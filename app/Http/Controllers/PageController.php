@@ -72,6 +72,8 @@ class PageController extends Controller
         $friends = $user->friends()->get();
         $incomingRequests = $user->receivedFriendRequests()->where('status', 'pending')->with('sender')->get();
         $outgoingRequests = $user->sentFriendRequests()->where('status', 'pending')->with('receiver')->get();
+        $following = $user->following()->get();
+        $followers = $user->followers()->get();
 
         return view('profile', [
             'user' => $user,
@@ -79,6 +81,8 @@ class PageController extends Controller
             'friends' => $friends,
             'incomingRequests' => $incomingRequests,
             'outgoingRequests' => $outgoingRequests,
+            'following' => $following,
+            'followers' => $followers,
         ]);
     }
 
@@ -87,8 +91,16 @@ class PageController extends Controller
         /* Public profile page for viewing another user's (and their co-authored) posts */
         $posts = $user->visiblePosts()->orderBy('created_at', 'desc')->paginate(10);
         $friendship = Auth::check() ? Auth::user()->friendshipWith($user) : null;
+        $isFollowing = Auth::check() ? Auth::user()->isFollowing($user) : false;
 
-        return view('author-profile', ['user' => $user, 'posts' => $posts, 'friendship' => $friendship]);
+        return view('author-profile', [
+            'user' => $user,
+            'posts' => $posts,
+            'friendship' => $friendship,
+            'isFollowing' => $isFollowing,
+            'followersCount' => $user->followers()->count(),
+            'followingCount' => $user->following()->count(),
+        ]);
     }
 
     public function showTag(Tag $tag)
