@@ -88,4 +88,9 @@ class User extends Authenticatable
     {
         return $this->friendshipWith($other)?->status === 'accepted';
     }
+
+    public function unreadMessagesCount(): int
+    {
+        return Message::where('receiver_id', $this->id)->whereNull('read_at')->count();
+    }
 }

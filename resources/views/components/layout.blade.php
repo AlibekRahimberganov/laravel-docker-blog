@@ -38,6 +38,15 @@
                     @endguest
                     @auth
                         <li class="nav-item"><a class="nav-link" href="{{ route('blog.profile') }}">{{ auth()->user()->login }}</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('messages.index') }}">
+                                Messages
+                                @php $unread = auth()->user()->unreadMessagesCount(); @endphp
+                                @if ($unread > 0)
+                                    <span class="bg-red-500 text-white text-xs rounded-full px-2 py-0.5">{{ $unread }}</span>
+                                @endif
+                            </a>
+                        </li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('blog.favourites') }}">Favourites</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('blog.create') }}">Create New Post</a></li>
                         @if (auth()->user()->isAdmin())

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FriendshipController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\StatsController;
@@ -32,6 +33,10 @@ Route::middleware('auth')->group(function () {
     Route::post('friends/{user}', [FriendshipController::class, 'store'])->name('friends.request');
     Route::put('friends/{friendship}/accept', [FriendshipController::class, 'accept'])->name('friends.accept');
     Route::delete('friends/{friendship}', [FriendshipController::class, 'destroy'])->name('friends.destroy');
+
+    Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('messages/{user}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('messages/{user}', [MessageController::class, 'store'])->name('messages.store');
 });
 
 Route::get('post/{post}', [PageController::class, 'show_specific_post'])->name('blog.post');
