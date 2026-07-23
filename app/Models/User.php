@@ -52,6 +52,11 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'login';
+    }
+
     public function getAvatarUrlAttribute(): string
     {
         return $this->avatar ? asset('storage/'.$this->avatar) : asset('images/default-avatar.svg');
