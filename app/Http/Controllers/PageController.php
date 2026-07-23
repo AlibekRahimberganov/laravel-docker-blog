@@ -47,9 +47,18 @@ class PageController extends Controller
     public function show()
     {
         /* Showing all posts on main page */
-        $posts = Posts::with(['tags'])->orderBy('created_at', 'desc')->paginate(10);
+        $posts = Posts::with(['tags'])->orderBy('created_at', 'desc')->paginate(50);
 
-        return view('welcome', ['posts' => $posts]);
+        // Placeholder recommendation logic: most-recommended posts first, falling back
+        // to newest — the actual recommendation algorithm is still to be designed.
+        $recommendedPosts = Posts::with(['tags'])
+            ->withCount(['reactions as recommends_count' => fn ($query) => $query->where('type', 'recommend')])
+            ->orderByDesc('recommends_count')
+            ->orderByDesc('created_at')
+            ->take(12)
+            ->get();
+
+        return view('welcome', ['posts' => $posts, 'recommendedPosts' => $recommendedPosts]);
     }
 
     public function about()
@@ -68,7 +77,7 @@ class PageController extends Controller
     {
         /* Showing user profile, including posts they co-author, friends, and pending requests */
         $user = Auth::user();
-        $posts = $user->visiblePosts()->orderBy('created_at', 'desc')->paginate(10);
+        $posts = $user->visiblePosts()->orderBy('created_at', 'desc')->paginate(50);
         $friends = $user->friends()->get();
         $incomingRequests = $user->receivedFriendRequests()->where('status', 'pending')->with('sender')->get();
         $outgoingRequests = $user->sentFriendRequests()->where('status', 'pending')->with('receiver')->get();
@@ -89,7 +98,7 @@ class PageController extends Controller
     public function authorProfile(User $user)
     {
         /* Public profile page for viewing another user's (and their co-authored) posts */
-        $posts = $user->visiblePosts()->orderBy('created_at', 'desc')->paginate(10);
+        $posts = $user->visiblePosts()->orderBy('created_at', 'desc')->paginate(50);
         $friendship = Auth::check() ? Auth::user()->friendshipWith($user) : null;
         $isFollowing = Auth::check() ? Auth::user()->isFollowing($user) : false;
 
@@ -106,7 +115,7 @@ class PageController extends Controller
     public function showTag(Tag $tag)
     {
         /* Showing all posts under a given tag */
-        $posts = $tag->posts()->orderBy('created_at', 'desc')->paginate(10);
+        $posts = $tag->posts()->orderBy('created_at', 'desc')->paginate(50);
 
         return view('tag', ['tag' => $tag, 'posts' => $posts]);
     }
@@ -116,7 +125,7 @@ class PageController extends Controller
         /* Showing posts the current user has recommended */
         $posts = Posts::whereHas('reactions', function ($query) {
             $query->where('user_id', Auth::id())->where('type', 'recommend');
-        })->with(['category', 'tags'])->orderBy('created_at', 'desc')->paginate(10);
+        })->with(['category', 'tags'])->orderBy('created_at', 'desc')->paginate(50);
 
         return view('favourites', ['posts' => $posts]);
     }
