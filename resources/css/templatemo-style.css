@@ -12,7 +12,7 @@ https://templatemo.com/tm-556-catalog-z
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1001;
+    z-index: 1040;
 }
 #loader {
     display: block;
@@ -93,7 +93,7 @@ https://templatemo.com/tm-556-catalog-z
         width: 51%;
         height: 100%;
         background: #222222;
-        z-index: 1001;
+        z-index: 1040;
         -webkit-transform: translateX(0);  /* Chrome, Opera 15+, Safari 3.1+ */
         -ms-transform: translateX(0);  /* IE 9 */
         transform: translateX(0);  /* Firefox 16+, IE 10+, Opera */
@@ -182,6 +182,9 @@ a:hover { color:#009999; }
 .tm-btn-big { padding: 12px 90px 14px; }
 
 .navbar-toggler:focus { box-shadow: none; }
+.navbar {
+    background-color: #ffffff;
+}
 .navbar-brand {
     color: #3399CC;
     font-size: 1.6rem;
@@ -217,6 +220,13 @@ a.tm-text-primary:hover { color:#666666; }
     color: #666666;
     border-bottom: 4px solid transparent;
     font-size: 1.2rem;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: #3399CC;
+    border-color: #3399CC;
 }
 
 .nav-link-1.active,
@@ -270,7 +280,7 @@ a.tm-text-primary:hover { color:#666666; }
     margin-left: -1px;
 }
 
-p, .tm-text-gray { color: #999; }
+.tm-text-gray { color: #999; }
 .tm-text-gray-light { color: #CCC; }
 .tm-text-gray-dark { color: #666; }
 
@@ -323,6 +333,9 @@ p, .tm-text-gray { color: #999; }
 .tm-video-item h2 {
     word-spacing: -0.15em;
     font-weight: 300;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 
 .tm-video-item h2,
@@ -415,7 +428,7 @@ figure.effect-ming:hover h2 {
 	transform: scale3d(1,1,1);
 }
 
-figure.effect-ming:hover figcaption { background-color: rgba(58,52,42,0); }
+figure.effect-ming:hover figcaption { background-color: rgba(20,20,20,0.65); }
 figure.effect-ming:hover img { opacity: 0.4; }
 
 .tm-footer-links li {

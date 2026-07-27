@@ -50,7 +50,7 @@ class AdminPanelTest extends TestCase
         $admin = $this->admin();
         $user = User::factory()->create();
 
-        $response = $this->actingAs($admin)->patch("/admin/users/{$user->id}/role", ['role' => 'admin']);
+        $response = $this->actingAs($admin)->patch("/admin/users/{$user->login}/role", ['role' => 'admin']);
 
         $response->assertRedirect();
         $this->assertTrue($user->fresh()->isAdmin());
@@ -60,7 +60,7 @@ class AdminPanelTest extends TestCase
     {
         $admin = $this->admin();
 
-        $this->actingAs($admin)->patch("/admin/users/{$admin->id}/role", ['role' => 'user']);
+        $this->actingAs($admin)->patch("/admin/users/{$admin->login}/role", ['role' => 'user']);
 
         $this->assertTrue($admin->fresh()->isAdmin());
     }
@@ -69,7 +69,7 @@ class AdminPanelTest extends TestCase
     {
         $admin = $this->admin();
 
-        $this->actingAs($admin)->delete("/admin/users/{$admin->id}");
+        $this->actingAs($admin)->delete("/admin/users/{$admin->login}");
 
         $this->assertDatabaseHas('users', ['id' => $admin->id]);
     }

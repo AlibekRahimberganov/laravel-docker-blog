@@ -78,11 +78,29 @@
         @endauth
     </div>
 
-    <h4>Author: <b>{{ $post->user->login }}</b></h4>
+    <h4>Author: <b><a href="{{ route('blog.author', $post->user) }}">{{ $post->user->login }}</a></b></h4>
+    @if ($post->coAuthors->isNotEmpty())
+        <h5>Co-authors:
+            @foreach ($post->coAuthors as $coAuthor)
+                @if ($coAuthor->user)
+                    <a href="{{ route('blog.author', $coAuthor->user) }}">{{ $coAuthor->user->login }}</a>@if (! $loop->last), @endif
+                @else
+                    {{ $coAuthor->name }}@if (! $loop->last), @endif
+                @endif
+            @endforeach
+        </h5>
+    @endif
     <h5>Category: <b>{{ $post->category->name }}</b></h5>
+    @if ($post->tags->isNotEmpty())
+        <div class="my-2">
+            @foreach ($post->tags as $tag)
+                <a href="{{ route('blog.tag', $tag) }}" class="btn text-xs mr-2">#{{ $tag->name }}</a>
+            @endforeach
+        </div>
+    @endif
 
     @auth
-        @if (Auth::user()->id == $post->user_id)
+        @if ($post->isEditableBy(Auth::user()))
             <form action="{{ route('blog.delete', ['post' => $post->id]) }}" method="POST">
                 @csrf
                 @method('DELETE')

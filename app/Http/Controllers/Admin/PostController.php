@@ -9,7 +9,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Posts::with(['user', 'category'])
+        $posts = Posts::with(['user', 'category', 'coAuthors.user', 'tags'])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 

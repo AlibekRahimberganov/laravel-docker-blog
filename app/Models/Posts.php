@@ -27,6 +27,25 @@ class Posts extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    public function coAuthors()
+    {
+        return $this->hasMany(PostAuthor::class, 'post_id')->orderBy('display_order');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id');
+    }
+
+    public function isEditableBy(?User $user): bool
+    {
+        if (! $user) {
+            return false;
+        }
+
+        return $user->id === $this->user_id || $this->coAuthors()->where('user_id', $user->id)->exists();
+    }
+
     public const CREATED_AT = 'created_at';
 
     public const UPDATED_AT = 'edited_at';

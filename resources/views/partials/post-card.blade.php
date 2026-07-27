@@ -42,6 +42,13 @@
             <a href="{{ route('blog.post', $post) }}">View more</a>
         </figcaption>
     </figure>
+    @if ($post->tags->isNotEmpty())
+        <div style="padding: 0 8px;" class="mb-1">
+            @foreach ($post->tags->take(3) as $tag)
+                <a href="{{ route('blog.tag', $tag) }}" class="btn text-xs" style="padding: 2px 8px;">#{{ $tag->name }}</a>
+            @endforeach
+        </div>
+    @endif
     <div class="d-flex justify-content-between tm-text-gray" style="padding: 0 8px;">
         <span class="tm-text-gray-light">{{ $post->created_at->format('d M Y') }}</span>
         <div class="d-flex gap-3 text-xs">
